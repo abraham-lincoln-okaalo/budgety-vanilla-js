@@ -73,7 +73,7 @@ var UIcontroller = (function () {
       return {
         type: document.querySelector(DOMstrings.inputType).value, // inc or exp
         description: document.querySelector(DOMstrings.inputDescription).value,
-        value: document.querySelector(DOMstrings.inputValue).value,
+        value: parseFloat(document.querySelector(DOMstrings.inputValue).value),
       };
     },
     addListItem: function(obj, type){
@@ -126,8 +126,8 @@ var UIcontroller = (function () {
 
      fieldsArr.forEach((current, index, array) => {
       current.value = "";
-
      });
+
      fieldsArr[0].focus();
     },
 
@@ -139,9 +139,9 @@ var UIcontroller = (function () {
 
 // controller module
 // add event handler
-var controller = (function (budgetCtrl, UICtrl) {
+ var controller = (function (budgetCtrl, UICtrl) {
   var setupEventListeners = function () {
-    var DOM = UICtrl.getDOMstrings();
+   var DOM = UICtrl.getDOMstrings();
 
     document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
 
@@ -151,23 +151,31 @@ var controller = (function (budgetCtrl, UICtrl) {
       }
     });
   };
+ var updateBudget = function(){
+   // calculcate the budget
+   // return the budget
+   // display the budget to the ui
+ }
 
   var ctrlAddItem = function () {
    var input, newItem;
     // get field input data
      input = UICtrl.getInput();
 
-    // add item to budget controller
-     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+     if(input.description !== "" &&  !isNaN(input.value) && input.value > 0){
+       // add item to budget controller
+       newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-    // add item ui
-    UICtrl.addListItem(newItem, input.type);
+       // add item ui
+       UICtrl.addListItem(newItem, input.type);
 
-    // clear fields
-    UICtrl.clearFields();
+       // clear fields
+       UICtrl.clearFields();
 
-    // calculcate the budget
-    // display the budget to the ui
+       // calculate and update the budget
+       updateBudget();
+
+     }
   };
 
   return {
