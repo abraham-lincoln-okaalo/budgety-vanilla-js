@@ -2,6 +2,7 @@
 // add the new item to our data structure
 // calculate the budget
 var budgetController = (function () {
+
   var expense = function(id, description, value){
    this.id = id;
    this.description = description;
@@ -14,6 +15,15 @@ var budgetController = (function () {
       this.value = value;
     };
 
+    var calculateTotal = function(type){
+     var sum = 0;
+
+     data.allItems[type].forEach((cur) => {
+      sum += cur.value;
+     })
+     data.totals[type] = sum;
+    };
+
     var data = {
      allItems: {
         exp: [],
@@ -22,7 +32,9 @@ var budgetController = (function () {
      totals:{
         exp: 0,
         inc: 0
-       }
+       },
+     budget: 0,
+     percentage: -1
     };
 
     return {
@@ -40,7 +52,8 @@ var budgetController = (function () {
          // create new item based on inc or exp type
          if (type === "exp") {
              newItem = new expense(ID, des, val);
-           } else if (type === "inc"){
+           }
+         else if (type === "inc"){
            newItem = new income(ID, des, val);
          }
 
@@ -49,9 +62,38 @@ var budgetController = (function () {
 
          // return the new element
          return newItem;
-      }
-    }
+      },
 
+      calculateBudget: function (){
+
+         // calculate the total income and expenses
+         calculateTotal('inc');
+         calculateTotal('exp');
+
+         // budget : income - expenses
+         data.budget = data.totals.inc - data.totals.exp;
+
+         // % of income spent
+         if(data.totals.inc > 0){
+         data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+           } else {
+         data.percentage = -1;
+        }
+      },
+
+      getBudget: function(){
+       return{
+        budget: data.budget,
+        totalInc: data.totalInc,
+        totalExp: data.totals.exp,
+        percentage: data.percentage
+       }
+      },
+
+      testing: function(){
+       console.log(data);
+      }
+    };
 })();
 
 // UI module
@@ -59,13 +101,13 @@ var budgetController = (function () {
 // add the new item to the UI
 // update the UI
 var UIcontroller = (function () {
-  var DOMstrings = {
-    inputType: ".add__type",
-    inputDescription: ".add__description",
-    inputValue: ".add__value",
-    inputBtn: ".add__btn",
-    incomeContainer: '.income__list',
-    expensesContainer: '.expenses__list'
+    var DOMstrings = {
+      inputType: ".add__type",
+      inputDescription: ".add__description",
+      inputValue: ".add__value",
+      inputBtn: ".add__btn",
+      incomeContainer: '.income__list',
+      expensesContainer: '.expenses__list'
   };
 
   return {
@@ -153,8 +195,13 @@ var UIcontroller = (function () {
   };
  var updateBudget = function(){
    // calculcate the budget
+   budgetCtrl.calculateBudget();
+
    // return the budget
+   var budget = budgetCtrl.getBudget();
+
    // display the budget to the ui
+   console.log(budget);
  }
 
   var ctrlAddItem = function () {
