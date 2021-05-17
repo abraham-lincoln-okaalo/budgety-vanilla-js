@@ -108,7 +108,8 @@ var UIcontroller = (function () {
     budgetLabel: ".budget__value",
     incomeLabel: ".budget__income--value",
     expensesLabel: ".budget__expenses--value",
-    percentageLabel: ".budget__expenses--percentage"
+    percentageLabel: ".budget__expenses--percentage",
+    container: ".container"
   };
 
   return {
@@ -180,8 +181,7 @@ var UIcontroller = (function () {
       document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
       document.querySelector(DOMstrings.expensesLabel).textContent =
         obj.totalExp;
-      
-      
+
         if(obj.percentage > 0){
           document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + '%';
 
@@ -212,6 +212,8 @@ var controller = (function (budgetCtrl, UICtrl) {
         ctrlAddItem();
       }
     });
+
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
   };
   var updateBudget = function () {
     // calculcate the budget
@@ -259,3 +261,10 @@ var controller = (function (budgetCtrl, UICtrl) {
 })(budgetController, UIcontroller);
 
 controller.init();
+
+// TO-DO-List (event delegation)
+// add event handler to listen for click on delete button
+// delete item from data structure
+// delete iteme from the UI
+// recalculcate budget
+// update the UI
