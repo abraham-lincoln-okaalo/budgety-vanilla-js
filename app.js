@@ -66,7 +66,7 @@ var budgetController = (function () {
       // loop over elements in an inc or exp arr
 
     var ids, index;
-    
+
     ids = data.allItems[type].map(function(current){
         return current.id;
       });
@@ -74,7 +74,7 @@ var budgetController = (function () {
       index = ids.indexOf(id)
 
       if(index !== -1){
-       data.allItems[type].splice(index, 1);
+    data.allItems[type].splice(index, 1);
       }
     },
 
@@ -176,6 +176,12 @@ var UIcontroller = (function () {
       // insert the html into the dom
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
+
+    deleteListItem: function(selectorID){
+      var el =  document.getElementById(selectorID);
+      el.parentNode.removeChild(el);
+    },
+
     clearFields: function () {
       var fields, fieldsArr;
 
@@ -210,7 +216,7 @@ var UIcontroller = (function () {
 
     },
 
-    getDOMstrings: function () { 
+    getDOMstrings: function () {
       return DOMstrings;
     },
   };
@@ -249,7 +255,7 @@ var controller = (function (budgetCtrl, UICtrl) {
     input = UICtrl.getInput();
 
     if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
-      // add item to budget controller 
+      // add item to budget controller
       newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
       // add item ui
@@ -265,7 +271,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 
   var ctrlDeleteItem = function(event){
     var itemID, splitID, type, ID;
- 
+
     itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
     if (itemID){
@@ -277,9 +283,13 @@ var controller = (function (budgetCtrl, UICtrl) {
       // add event handler to listen for click on delete button
       // delete item from data structure
       budgetCtrl.deleteItem(type, ID);
+
       // delete item from the UI
+      UICtrl.deleteListItem(itemID);
+
       // recalculcate budget
       // update the ui with new budget
+      updateBudget();
 
     }
   }
