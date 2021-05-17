@@ -249,6 +249,14 @@ var controller = (function (budgetCtrl, UICtrl) {
     UICtrl.displayBudget(budget);
   };
 
+  var updatePercentages  = function(){
+    //  calculate the budget
+
+    // read percentages from the budget controller
+
+    //  update the UI with the new percentages
+  }
+
   var ctrlAddItem = function () {
     var input, newItem;
     // get field input data
@@ -266,6 +274,9 @@ var controller = (function (budgetCtrl, UICtrl) {
 
       // calculate and update the budget
       updateBudget();
+
+      // calculate and update percentages
+      updatePercentages();
     }
   };
 
@@ -291,6 +302,9 @@ var controller = (function (budgetCtrl, UICtrl) {
       // update the ui with new budget
       updateBudget();
 
+      // calculate and update percentages
+      updatePercentages ();
+
     }
   }
 
@@ -310,4 +324,9 @@ var controller = (function (budgetCtrl, UICtrl) {
 
 controller.init();
 
-// TO-DO-List (event delegation)
+// TO-DO-List
+// calculcate percentages
+// update percentages in UI
+// display current month and year
+// number formatiing
+// improve input field UX
